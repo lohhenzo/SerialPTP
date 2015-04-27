@@ -4,7 +4,7 @@ import serial
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-ser = serial.Serial('/dev/ttyACM0', 9600)
+ser = serial.Serial('/dev/ttyACM1', 9600)
 
 @app.route('/')
 def index_page():
@@ -20,10 +20,15 @@ def ptp():
         'LOC1003': '1,1',
         'LOC1007': '2,2',
         'LOC1011': '5,3',
-        'LOC10015':'8,8'
+        'LOC10015':'7,7'
     }
     pn = request.args.get('part')
     ser.write(coordinates[pn])
+    return '1'
+
+@app.route('/off', methods=['GET','POST'])
+def off():
+    ser.write('z')
     return '1'
 
 @app.route('/shutdown', methods=['POST'])
